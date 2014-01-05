@@ -5,13 +5,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
-    <meta name="author" content="Pedro Landeiroto">
-    <link rel="shortcut icon" href="public/img/ico/favicon.png">
+    <meta name="author" content="zok">
 
     <title>CodeIgniter - Doctrine - Bootstrap</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="public/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <style type="text/css">
@@ -41,11 +40,6 @@
         }
     </style>
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="public/js/html5shiv.js"></script>
-    <script src="public/js/respond.min.js"></script>
-    <![endif]-->
 </head>
 
 <body>
@@ -75,7 +69,7 @@
             <ul>
                 <li class="bigger_text">Codeigniter 2.1.4</li>
                 <li class="bigger_text">Doctrine 2.3.4</li>
-                <li class="bigger_text">Twitter Bootstrap 3.0.0</li>
+                <li class="bigger_text">Twitter Bootstrap 3.0.3</li>
                 <li class="bigger_text">jQuery 2.0.3</li>
                 <li class="bigger_text">Added .htaccess and enabled mod_rewrite</li>
                 <li class="bigger_text">Doctrine library autoloaded in Codeigniter confi.php</li>
@@ -103,9 +97,6 @@
                     <li class="bigger_text"><a href="http://docs.doctrine-project.org/en/latest/tutorials/getting-started.html" target="blank">http://docs.doctrine-project.org/en/latest/tutorials/getting-started.html</a></li>
                     <li class="bigger_text"><a href="http://getbootstrap.com/getting-started" target="blank">http://getbootstrap.com/getting-started</a></li>
             </ul>
-
-
-
         </p>
 
         <h1><strong>License</h1>
@@ -133,7 +124,7 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="public/js/jquery.js"></script>
-<script src="public/js/bootstrap.min.js"></script>
+<script src="assets/js/jquery.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
 </body>
 </html>

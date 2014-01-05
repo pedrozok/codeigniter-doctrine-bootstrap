@@ -10,13 +10,13 @@ Included:
 
 - Doctrine 2.3.4
 
-- Twitter Bootstrap 3.0.0
+- Twitter Bootstrap 3.0.3
 
 - jQuery 2.0.3
 
 - Added .htaccess and enabled mod_rewrite
 
-- Doctrine library autoloaded in Codeigniter confi.php
+- Doctrine library autoloaded in Codeigniter config.php
 
 Instalation & Usage
 ===================
@@ -41,7 +41,7 @@ The folder **application/models/Entity** will store all the Entities/Classes cre
 If you want to change the Entity default folder and/or the Namespace change de settings in the file application/libraries/Doctrine.php.
 
 
-For more info of usage please refer the the frameworks documentation:
+For more info of usage please refer to the frameworks documentation:
 
 
 - http://ellislab.com/codeigniter/user-guide
@@ -57,8 +57,6 @@ Under the MIT licence.
 Author
 ======
 
-**Pedro Landeiroto**
-
-- @pedro_zok
+**@pedro_zok**
 
 - zok@quobits.com
