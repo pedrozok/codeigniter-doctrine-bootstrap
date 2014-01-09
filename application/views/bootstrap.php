@@ -72,6 +72,7 @@
                 <li class="bigger_text">Twitter Bootstrap 3.0.3</li>
                 <li class="bigger_text">jQuery 2.0.3</li>
                 <li class="bigger_text">Added .htaccess and enabled mod_rewrite</li>
+                <li class="bigger_text">Added a BCrypt Library, for reference check the source: https://github.com/dwightwatson/codeigniter-bcrypt</li>
                 <li class="bigger_text">Doctrine library autoloaded in Codeigniter confi.php</li>
             </ul>
         </p>
