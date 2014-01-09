@@ -68,7 +68,7 @@
         <strong><h3>Included:</h3></strong>
             <ul>
                 <li class="bigger_text">Codeigniter 2.1.4</li>
-                <li class="bigger_text">Doctrine 2.3.4</li>
+                <li class="bigger_text">Doctrine 2.4</li>
                 <li class="bigger_text">Twitter Bootstrap 3.0.3</li>
                 <li class="bigger_text">jQuery 2.0.3</li>
                 <li class="bigger_text">Added .htaccess and enabled mod_rewrite</li>

@@ -19,12 +19,20 @@
 
 namespace Doctrine\DBAL\Driver\PDOSqlite;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\ExceptionConverterDriver;
+use Doctrine\DBAL\Driver\PDOConnection;
+use Doctrine\DBAL\Platforms\SqlitePlatform;
+use Doctrine\DBAL\Schema\SqliteSchemaManager;
+use PDOException;
+
 /**
  * The PDO Sqlite driver.
  *
  * @since 2.0
  */
-class Driver implements \Doctrine\DBAL\Driver
+class Driver implements \Doctrine\DBAL\Driver, ExceptionConverterDriver
 {
     /**
      * @var array
@@ -36,13 +44,7 @@ class Driver implements \Doctrine\DBAL\Driver
     );
 
     /**
-     * Tries to establish a database connection to SQLite.
-     *
-     * @param array $params
-     * @param string $username
-     * @param string $password
-     * @param array $driverOptions
-     * @return \Doctrine\DBAL\Driver\PDOConnection
+     * {@inheritdoc}
      */
     public function connect(array $params, $username = null, $password = null, array $driverOptions = array())
     {
@@ -52,12 +54,16 @@ class Driver implements \Doctrine\DBAL\Driver
             unset($driverOptions['userDefinedFunctions']);
         }
 
-        $pdo = new \Doctrine\DBAL\Driver\PDOConnection(
-            $this->_constructPdoDsn($params),
-            $username,
-            $password,
-            $driverOptions
-        );
+        try {
+            $pdo = new PDOConnection(
+                $this->_constructPdoDsn($params),
+                $username,
+                $password,
+                $driverOptions
+            );
+        } catch (PDOException $ex) {
+            throw DBALException::driverException($this, $ex);
+        }
 
         foreach ($this->_userDefinedFunctions as $fn => $data) {
             $pdo->sqliteCreateFunction($fn, $data['callback'], $data['numArgs']);
@@ -69,15 +75,16 @@ class Driver implements \Doctrine\DBAL\Driver
     /**
      * Constructs the Sqlite PDO DSN.
      *
-     * @return string  The DSN.
-     * @override
+     * @param array $params
+     *
+     * @return string The DSN.
      */
     protected function _constructPdoDsn(array $params)
     {
         $dsn = 'sqlite:';
         if (isset($params['path'])) {
             $dsn .= $params['path'];
-        } else if (isset($params['memory'])) {
+        } elseif (isset($params['memory'])) {
             $dsn .= ':memory:';
         }
 
@@ -85,32 +92,86 @@ class Driver implements \Doctrine\DBAL\Driver
     }
 
     /**
-     * Gets the database platform that is relevant for this driver.
+     * {@inheritdoc}
      */
     public function getDatabasePlatform()
     {
-        return new \Doctrine\DBAL\Platforms\SqlitePlatform();
+        return new SqlitePlatform();
     }
 
     /**
-     * Gets the schema manager that is relevant for this driver.
-     *
-     * @param \Doctrine\DBAL\Connection $conn
-     * @return \Doctrine\DBAL\Schema\SqliteSchemaManager
+     * {@inheritdoc}
      */
-    public function getSchemaManager(\Doctrine\DBAL\Connection $conn)
+    public function getSchemaManager(Connection $conn)
     {
-        return new \Doctrine\DBAL\Schema\SqliteSchemaManager($conn);
+        return new SqliteSchemaManager($conn);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'pdo_sqlite';
     }
 
-    public function getDatabase(\Doctrine\DBAL\Connection $conn)
+    /**
+     * {@inheritdoc}
+     */
+    public function getDatabase(Connection $conn)
     {
         $params = $conn->getParams();
+
         return isset($params['path']) ? $params['path'] : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @link http://www.sqlite.org/c3ref/c_abort.html
+     */
+    public function convertExceptionCode(\Exception $exception)
+    {
+        if (strpos($exception->getMessage(), 'must be unique') !== false) {
+            return DBALException::ERROR_DUPLICATE_KEY;
+        }
+
+        if (strpos($exception->getMessage(), 'may not be NULL') !== false) {
+            return DBALException::ERROR_NOT_NULL;
+        }
+
+        if (strpos($exception->getMessage(), 'is not unique') !== false) {
+            return DBALException::ERROR_DUPLICATE_KEY;
+        }
+
+        if (strpos($exception->getMessage(), 'no such table:') !== false) {
+            return DBALException::ERROR_UNKNOWN_TABLE;
+        }
+
+        if (strpos($exception->getMessage(), 'already exists') !== false) {
+            return DBALException::ERROR_TABLE_ALREADY_EXISTS;
+        }
+
+        if (strpos($exception->getMessage(), 'has no column named') !== false) {
+            return DBALException::ERROR_BAD_FIELD_NAME;
+        }
+
+        if (strpos($exception->getMessage(), 'ambiguous column name') !== false) {
+            return DBALException::ERROR_NON_UNIQUE_FIELD_NAME;
+        }
+
+        if (strpos($exception->getMessage(), 'syntax error') !== false) {
+            return DBALException::ERROR_SYNTAX;
+        }
+
+        if (strpos($exception->getMessage(), 'attempt to write a readonly database') !== false) {
+            return DBALException::ERROR_WRITE_READONLY;
+        }
+
+        if (strpos($exception->getMessage(), 'unable to open database file') !== false) {
+            return DBALException::ERROR_UNABLE_TO_OPEN;
+        }
+
+        return 0;
     }
 }

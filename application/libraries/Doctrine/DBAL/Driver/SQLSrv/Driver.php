@@ -19,11 +19,18 @@
 
 namespace Doctrine\DBAL\Driver\SQLSrv;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Platforms\SQLServer2008Platform;
+use Doctrine\DBAL\Schema\SQLServerSchemaManager;
+
 /**
- * Driver for ext/sqlsrv
+ * Driver for ext/sqlsrv.
  */
 class Driver implements \Doctrine\DBAL\Driver
 {
+    /**
+     * {@inheritdoc}
+     */
     public function connect(array $params, $username = null, $password = null, array $driverOptions = array())
     {
         if (!isset($params['host'])) {
@@ -48,25 +55,44 @@ class Driver implements \Doctrine\DBAL\Driver
         return new SQLSrvConnection($serverName, $driverOptions);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getDatabasePlatform()
     {
-        return new \Doctrine\DBAL\Platforms\SQLServer2008Platform();
+        return new SQLServer2008Platform();
     }
 
-    public function getSchemaManager(\Doctrine\DBAL\Connection $conn)
+    /**
+     * {@inheritdoc}
+     */
+    public function getSchemaManager(Connection $conn)
     {
-        return new \Doctrine\DBAL\Schema\SQLServerSchemaManager($conn);
+        return new SQLServerSchemaManager($conn);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'sqlsrv';
     }
 
-    public function getDatabase(\Doctrine\DBAL\Connection $conn)
+    /**
+     * {@inheritdoc}
+     */
+    public function getDatabase(Connection $conn)
     {
         $params = $conn->getParams();
         return $params['dbname'];
     }
-}
 
+    /**
+     * {@inheritdoc}
+     */
+    public function convertExceptionCode(\Exception $exception)
+    {
+        return 0;
+    }
+}

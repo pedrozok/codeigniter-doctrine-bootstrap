@@ -1,7 +1,5 @@
 <?php
 /*
- *  $Id$
- *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -21,7 +19,7 @@
 
 namespace Doctrine\DBAL\Driver;
 
-use \PDO;
+use PDO;
 
 /**
  * PDO implementation of the Connection interface.
@@ -31,10 +29,63 @@ use \PDO;
  */
 class PDOConnection extends PDO implements Connection
 {
+    /**
+     * @param string      $dsn
+     * @param string|null $user
+     * @param string|null $password
+     * @param array|null  $options
+     */
     public function __construct($dsn, $user = null, $password = null, array $options = null)
     {
         parent::__construct($dsn, $user, $password, $options);
         $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('Doctrine\DBAL\Driver\PDOStatement', array()));
         $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function prepare($prepareString, $driverOptions = array())
+    {
+        return parent::prepare($prepareString, $driverOptions);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function query()
+    {
+        $args = func_get_args();
+        $argsCount = count($args);
+
+        if ($argsCount == 4) {
+            return parent::query($args[0], $args[1], $args[2], $args[3]);
+        }
+
+        if ($argsCount == 3) {
+            return parent::query($args[0], $args[1], $args[2]);
+        }
+
+        if ($argsCount == 2) {
+            return parent::query($args[0], $args[1]);
+        }
+
+        return parent::query($args[0]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function quote($input, $type = \PDO::PARAM_STR)
+    {
+        return parent::quote($input, $type);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function lastInsertId($name = null)
+    {
+        return parent::lastInsertId($name);
     }
 }

@@ -19,7 +19,7 @@
 
 namespace Doctrine\Common\Annotations;
 
-use Doctrine\Common\Lexer;
+use Doctrine\Common\Lexer\AbstractLexer;
 
 /**
  * Simple lexer for docblock annotations.
@@ -30,7 +30,7 @@ use Doctrine\Common\Lexer;
  * @author Roman Borschel <roman@code-factory.org>
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-final class DocLexer extends Lexer
+final class DocLexer extends AbstractLexer
 {
     const T_NONE                = 1;
     const T_INTEGER             = 2;
@@ -76,7 +76,7 @@ final class DocLexer extends Lexer
     protected function getCatchablePatterns()
     {
         return array(
-            '[a-z_\\\][a-z0-9_\:\\\]*[a-z]{1}',
+            '[a-z_\\\][a-z0-9_\:\\\]*[a-z_][a-z0-9_]*',
             '(?:[+-]?[0-9]+(?:[\.][0-9]+)*)(?:[eE][+-]?[0-9]+)?',
             '"(?:[^"]|"")*"',
         );

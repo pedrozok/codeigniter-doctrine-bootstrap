@@ -1,7 +1,5 @@
 <?php
 /*
- *  $Id: Interface.php 3882 2008-02-22 18:11:35Z jwage $
- *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -29,8 +27,16 @@ namespace Doctrine\DBAL\Driver;
  */
 class PDOStatement extends \PDOStatement implements Statement
 {
-    private function __construct() {}
+    /**
+     * Protected constructor.
+     */
+    protected function __construct()
+    {
+    }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setFetchMode($fetchMode, $arg2 = null, $arg3 = null)
     {
         // This thin wrapper is necessary to shield against the weird signature
@@ -46,5 +52,77 @@ class PDOStatement extends \PDOStatement implements Statement
         }
 
         return parent::setFetchMode($fetchMode, $arg2, $arg3);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function bindValue($param, $value, $type = \PDO::PARAM_STR)
+    {
+        return parent::bindValue($param, $value, $type);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function bindParam($column, &$variable, $type = \PDO::PARAM_STR, $length = null, $driverOptions = null)
+    {
+        return parent::bindParam($column, $variable, $type, $length, $driverOptions);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function execute($params = null)
+    {
+        return parent::execute($params);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function fetch($fetchMode = null, $cursorOrientation = null, $cursorOffset = null)
+    {
+        if ($fetchMode === null && $cursorOrientation === null && $cursorOffset === null) {
+            return parent::fetch();
+        }
+
+        if ($cursorOrientation === null && $cursorOffset === null) {
+            return parent::fetch($fetchMode);
+        }
+
+        if ($cursorOffset === null) {
+            return parent::fetch($fetchMode, $cursorOrientation);
+        }
+
+        return parent::fetch($fetchMode, $cursorOrientation, $cursorOffset);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function fetchAll($fetchMode = null, $fetchArgument = null, $ctorArgs = null)
+    {
+        if ($fetchMode === null && $fetchArgument === null && $ctorArgs === null) {
+            return parent::fetchAll();
+        }
+
+        if ($fetchArgument === null && $ctorArgs === null) {
+            return parent::fetchAll($fetchMode);
+        }
+
+        if ($ctorArgs === null) {
+            return parent::fetchAll($fetchMode, $fetchArgument);
+        }
+
+        return parent::fetchAll($fetchMode, $fetchArgument, $ctorArgs);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function fetchColumn($columnIndex = 0)
+    {
+        return parent::fetchColumn($columnIndex);
     }
 }

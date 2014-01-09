@@ -15,12 +15,15 @@
  * This software consists of voluntary contributions made by many individuals
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
-*/
+ */
 
 namespace Doctrine\DBAL\Driver\Mysqli;
+
+use Doctrine\DBAL\DBALException;
 
 /**
  * @author Kim Hemsø Rasmussen <kimhemsoe@gmail.com>
  */
-class MysqliException extends \Exception
-{}
+class MysqliException extends DBALException
+{
+}
