@@ -8,7 +8,7 @@ Included:
 
 - Codeigniter 2.1.4
 
-- Doctrine 2.3.4
+- Doctrine 2.4
 
 - Twitter Bootstrap 3.0.3
 
